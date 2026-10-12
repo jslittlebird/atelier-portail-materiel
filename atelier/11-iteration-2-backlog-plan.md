@@ -30,9 +30,9 @@ Ne modifie rien.
 ```
 
 3. **Relecture en groupe** (le gardien des critères vérifie) :
-   - chaque critère d'acceptation a-t-il un test prévu ?
-   - le plan reste-t-il dans notre dossier ?
-   - aucune nouvelle dépendance ?
+    - chaque critère d'acceptation a-t-il un test prévu ?
+    - le plan reste-t-il dans notre dossier ?
+    - aucune nouvelle dépendance ?
 4. Si besoin, faites corriger : `Le critère 2 n'est pas couvert, ajoute un test.`
 5. Puis :
 
