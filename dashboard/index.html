@@ -66,7 +66,7 @@ footer{margin-top:20px;color:var(--dim);font-size:.8rem;display:flex;justify-con
   <div class="panel"><h2>Activité récente</h2><div id="activity"></div></div>
   <div class="panel"><h2>Intégration continue</h2><div id="ci"></div></div>
 </section>
-<footer><span>Données lues en direct depuis l'API GitHub · rafraîchissement automatique toutes les 2 minutes</span><span>Little Bird</span></footer>
+<footer><span>Données lues en direct depuis l'API GitHub · rafraîchissement automatique toutes les 5 minutes</span><span>Little Bird</span></footer>
 <script>
 // Dépôt lu : paramètre ?repo=proprietaire/nom, sinon déduit de l'adresse GitHub Pages (proprietaire.github.io/nom).
 const params = new URLSearchParams(location.search);
@@ -151,7 +151,7 @@ async function charger(){
 }
 $('refresh').onclick = charger;
 charger();
-setInterval(charger, 120000);
+setInterval(charger, 300000);
 </script>
 </body>
 </html>
