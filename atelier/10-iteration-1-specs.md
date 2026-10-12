@@ -1,6 +1,6 @@
-# Itération 1 · Les specs de votre epic
+# Étape 1 · Les specs de votre epic
 
-**Durée** : 20 minutes (14h40 → 15h00) · **Où** : le Projet Claude du groupe (ou un fichier dans le dépôt) · **Au clavier** : le membre le moins à l'aise avec l'outil, guidé par le groupe.
+**Durée** : 20 minutes (14h50 → 15h10) · **Où** : Claude › Projets › un Projet « Portail · E1 » (ou E2, E3) · **Au clavier** : la personne venue le matin, qui a importé le skill à l'étape 0. Le **gardien des critères** note les décisions.
 
 ## Objectif
 
@@ -8,7 +8,7 @@ Transformer votre epic en **3 à 5 user stories** avec des **critères d'accepta
 
 ## Pas à pas
 
-**1. Donner le contexte (2 min)** · ajouter au Projet Claude les fichiers `docs/00-intention.md` et `docs/01-specs-v0.md` (ou les livrables du matin), puis coller :
+**1. Donner le contexte (2 min)** · créer le Projet, puis y déposer `docs/00-intention.md` et `docs/01-specs-v0.md` (sur GitHub, ouvrir chaque fichier → bouton **Download raw file**, puis glisser dans le Projet). Coller :
 
 ```
 Nous sommes le groupe de l'epic [E1 Catalogue et demande / E2 Validation et suivi / E3 Stock et livraison].
@@ -24,14 +24,13 @@ Liste les règles de gestion de notre epic et les cas limites
 
 Répondez. Le **gardien des critères** note les décisions.
 
-**3. Les user stories (8 min)**
+**3. Les user stories (8 min)** · le skill `rediger-user-story` s'active tout seul
 
 ```
-Rédige 3 à 5 user stories pour notre epic, au format :
-« En tant que…, je veux…, afin de… ».
-Pour chacune : 2 à 4 critères d'acceptation au format « Étant donné… Quand… Alors… »,
-chacun vérifiable par un test, et une ligne « Hors périmètre ».
+Rédige 3 à 5 user stories pour notre epic.
 ```
+
+Si le skill ne s'active pas : `Utilise le skill rediger-user-story.`
 
 **4. Challenger (5 min)** · lisez à voix haute et demandez :
 
@@ -48,4 +47,4 @@ Corrigez.
 - [ ] Le hors périmètre est écrit
 - [ ] Le groupe sait laquelle il veut faire en premier
 
-**Bloqués à 15h00 ?** Ouvrez `docs/kits/<votre epic>/kit.md`, sections 1 et 2, et passez à l'itération 2.
+**Bloqués à 15h10 ?** Ouvrez `docs/kits/<votre epic>/kit.md`, sections 1 et 2, et passez à l'itération 2.

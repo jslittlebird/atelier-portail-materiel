@@ -6,7 +6,8 @@
 | [Glossaire](glossaire.md) | Tout le monde | Toute la journée |
 | [Fil rouge du matin](01-matin-fil-rouge.md) | Groupe du matin | 11h30 |
 | [Démarrer son Codespace](02-demarrer-codespace.md) | Référents de groupe | 14h00 |
-| [Itération 1 · Specs](10-iteration-1-specs.md) | Les 3 groupes | 14h40 |
-| [Itération 2 · Backlog et plan](11-iteration-2-backlog-plan.md) | Les 3 groupes | 15h00 |
-| [Sprint](12-sprint.md) | Les 3 groupes | 15h35 |
-| [Revue de sprint](13-revue.md) | Les 3 groupes | 16h20 |
+| [Étape 0 · Le skill](09-etape-0-skill.md) | Les 3 groupes | 14h40 |
+| [Étape 1 · Specs](10-iteration-1-specs.md) | Les 3 groupes | 14h50 |
+| [Étape 2 · Backlog et plan](11-iteration-2-backlog-plan.md) | Les 3 groupes | 15h10 |
+| [Étape 3 · Sprint](12-sprint.md) | Les 3 groupes | 15h40 |
+| [Revue de sprint](13-revue.md) | Les 3 groupes | 16h25 |

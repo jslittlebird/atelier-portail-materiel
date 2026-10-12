@@ -1,6 +1,6 @@
-# Sprint · Faire réaliser, en gardant la main
+# Étape 3 · Le sprint : faire réaliser, en gardant la main
 
-**Durée** : 45 minutes (15h35 → 16h20) · **Où** : Claude Code dans le Codespace · **Au clavier** : le référent ; **en recette** : les autres membres.
+**Durée** : 45 minutes (15h40 → 16h25) · **Où** : Claude Code dans le Codespace · **Au clavier** : le référent ; **en recette** : les autres membres.
 
 ## Le principe
 

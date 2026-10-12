@@ -21,11 +21,14 @@ Puis sur GitHub :
 - [ ] LM Studio lancé, modèle GGUF chargé, serveur démarré ; page de démo testée
 - [ ] Tableau de bord ouvert : `https://<compte>.github.io/indra-atelier-portail-materiel/`
 - [ ] Un Codespace ouvert sur son poste, Claude Code connecté
-- [ ] Branche `demo/compteurs-accueil` prête pour la démo de 14h10
+- [ ] Branche `demo/compteurs-accueil` prête pour la démo de 14h20 ; skill `rediger-user-story` importé dans son compte Claude
 
-## La démo de 14h10 (25 min)
+## La démo de 14h20 (20 min) : les mêmes étapes que les groupes, en accéléré
 
-1. **En direct** : dans le Projet Claude, faire rédiger la story « compteurs sur l'accueil » et ses critères ; montrer l'issue correspondante (créée par le script).
-2. **En direct** : Claude Code en mode Plan sur cette issue → plan relu.
-3. **Déjà fait** : `git switch demo/compteurs-accueil` → montrer le code, les tests, le plan dans `docs/plan/`, la doc mise à jour ; ouvrir la pull request depuis cette branche → la CI tourne.
-4. Montrer le tableau de bord qui reflète l'issue et la pull request.
+Préparé avant : le skill `rediger-user-story` importé dans le compte Claude de l'animateur ; l'issue « Afficher des compteurs de demandes sur la page d'accueil » (créée par le script) ; la branche `demo/compteurs-accueil`.
+
+1. **Étape 0 (2 min, préparé)** : montrer le skill dans Paramètres › Capacités, lire sa description.
+2. **Étape 1 (4 min, en direct)** : dans un Projet, « rédige la user story des compteurs » → le skill s'active.
+3. **Étape 2 (6 min, en direct)** : l'issue dans GitHub, puis Claude Code en mode Plan sur cette issue → plan relu.
+4. **Étape 3 (4 min, préparé)** : `git switch demo/compteurs-accueil` → le code, les tests, le plan dans `docs/plan/`, la doc ; la pull request et la CI.
+5. **Revue (4 min, en direct)** : fusionner, l'issue se ferme, le tableau de bord bouge.

@@ -8,6 +8,9 @@
 | Température | Le réglage qui rend les réponses plus prévisibles (bas) ou plus variées (haut). |
 | Hallucination | Une information inventée mais présentée avec assurance. |
 | Complaisance | La tendance du modèle à vous donner raison. |
+| Poids (paramètres) | Les milliards de nombres internes du modèle, réglés pendant l'entraînement. |
+| Fine-tuning | L'étape qui transforme le modèle brut en assistant utile. |
+| RLHF | Fine-tuning par retours humains : des personnes choisissent la meilleure réponse, le modèle est ajusté pour leur plaire. |
 | Projet Claude | Un espace qui garde des consignes et des documents pour un sujet qui revient. |
 | Artefact | Un contenu produit à part par Claude : document, page, outil interactif. |
 | Connecteur | Un branchement de Claude vers un outil (GitHub, Microsoft 365…). |
@@ -28,4 +31,9 @@
 | User story | Un besoin vu par son utilisateur : « En tant que…, je veux…, afin de… ». |
 | Critère d'acceptation | Une condition vérifiable qui dit quand la story est terminée. |
 | Epic | Un gros bloc fonctionnel, découpé en plusieurs stories. |
+| Persona | Un utilisateur type, fictif mais réaliste. |
+| Parcours | Les étapes vécues par l'utilisateur, ici les statuts d'une demande. |
+| Note d'intention | Une page : le problème, ce qu'on veut, pour qui, réussi si, hors périmètre. |
+| Markdown | Du texte simple mis en forme avec des symboles : `#` pour un titre, `-` pour une liste. |
+| Mermaid | Un schéma décrit en texte, que Claude dessine. |
 | Sprint | Une période courte et limitée dans le temps pour livrer un incrément. |

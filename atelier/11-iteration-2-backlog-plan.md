@@ -1,29 +1,23 @@
-# Itération 2 · Backlog et plan
+# Étape 2 · Backlog et plan
 
-**Durée** : 25 minutes (15h00 → 15h25) · **Où** : GitHub puis Claude Code dans le Codespace.
+**Durée** : 20 minutes (15h10 → 15h30) · **Où** : GitHub puis Claude Code dans le Codespace.
 
-## Partie A · Le backlog (10 min) · au clavier : un membre du groupe
+## Partie A · L'issue (8 min) · au clavier : le gardien des critères
 
 Vos stories deviennent des **issues GitHub** : c'est le contrat entre ceux qui spécifient et l'IA qui réalise.
 
-**Option 1 (recommandée) · depuis Claude Code**, dans le panneau Claude du Codespace :
+On ne crée qu'**une** issue : celle de la story choisie pour le sprint.
 
-```
-Voici nos user stories : [coller les stories].
-Pour chacune, crée une issue GitHub avec la commande gh,
-labels "type:story,epic:E[n],groupe:[n]" et le jalon "Sprint 1 · 13/10".
-Montre-moi les commandes avant de les exécuter.
-```
+1. Sur GitHub, onglet **Issues** → **New issue** → modèle **User story**.
+2. Titre : le titre court de la story. Coller la story et ses critères dans les champs.
+3. À droite, **Labels** : `epic:E[n]`, `groupe:[n]` et `pret`. **Milestone** : « Sprint 1 · 13/10 ».
+4. **Create**. Notez le numéro de l'issue (#n) : il sert pour la suite.
 
-Relisez les commandes, puis autorisez.
+*Pour aller plus vite une autre fois* : Claude Code peut créer les issues lui-même avec la commande `gh` (il montre la commande et demande l'autorisation avant).
 
-**Option 2 · à la main** : sur GitHub, onglet **Issues** → **New issue** → modèle **User story**.
+✅ L'issue apparaît dans l'onglet Issues avec le label `pret`.
 
-Puis : choisissez **une** story pour le sprint (la plus simple et la plus visible) et ajoutez-lui le label `pret`.
-
-✅ Les issues apparaissent dans l'onglet Issues ; une story porte le label `pret`.
-
-## Partie B · Le plan (15 min) · au clavier : le référent
+## Partie B · Le plan (12 min) · au clavier : le référent
 
 1. Dans le panneau Claude, passer en mode **Plan**.
 2. Coller :
@@ -49,8 +43,8 @@ crée la branche feat/[numéro]-[titre-court] et fais un premier commit.
 
 ## ✅ Checkpoint 6b · validé par le référent et l'animateur
 
-- [ ] Les issues existent, une story est `pret`
+- [ ] L'issue de la story choisie existe, avec le label `pret`
 - [ ] Le plan couvre chaque critère d'acceptation par un test
 - [ ] Le plan est commité sur une branche `feat/...`
 
-**Bloqués à 15h25 ?** Utilisez le plan de `docs/kits/<votre epic>/kit.md` (section 4).
+**Bloqués à 15h30 ?** Utilisez le plan de `docs/kits/<votre epic>/kit.md` (section 4).
