@@ -1,6 +1,6 @@
 # Portail de demandes de matériel IT
 
-Projet pédagogique de l'atelier IA (DSI Indra, 13 octobre 2026). Données entièrement fictives.
+Projet pédagogique de l'atelier IA DSI (13 octobre 2026). Données entièrement fictives.
 
 ## Le produit
 

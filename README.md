@@ -1,6 +1,6 @@
 # Portail de demandes de matériel IT
 
-Projet fil rouge de l'atelier « L'IA générative au service de la DSI » (Indra, 13 octobre 2026), animé par Little Bird.
+Projet fil rouge de l'atelier « L'IA générative au service de la DSI » (13 octobre 2026), animé par Little Bird.
 **Toutes les données sont fictives.** L'application n'est pas destinée à la production.
 
 ## Démarrer en 3 clics (rien à installer)
