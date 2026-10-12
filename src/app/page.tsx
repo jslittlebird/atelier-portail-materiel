@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/lib/store";
 import { ROLES } from "@/lib/domaine";
+import { CompteursDemandes } from "@/features/e0-accueil/compteurs-demandes";
 
 export default function Accueil() {
   const { role, reinitialiser } = useStore();
@@ -17,6 +18,7 @@ export default function Accueil() {
           <strong>{ROLES[role]}</strong>.
         </p>
       </div>
+      <CompteursDemandes />
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader>
