@@ -1,0 +1,27 @@
+name: User story
+description: Une fonctionnalité vue par son utilisateur
+labels: ["type:story"]
+body:
+  - type: dropdown
+    id: epic
+    attributes:
+      label: Epic
+      options: ["E1 Catalogue et demande", "E2 Validation et suivi", "E3 Stock et livraison", "E0 Socle"]
+    validations: { required: true }
+  - type: textarea
+    id: story
+    attributes:
+      label: Story
+      description: "En tant que …, je veux …, afin de …"
+      placeholder: "En tant que demandeur, je veux filtrer le catalogue par catégorie, afin de trouver vite le bon matériel."
+    validations: { required: true }
+  - type: textarea
+    id: criteres
+    attributes:
+      label: Critères d'acceptation
+      description: "Testables. Format conseillé : Étant donné … Quand … Alors …"
+    validations: { required: true }
+  - type: textarea
+    id: hors
+    attributes:
+      label: Hors périmètre

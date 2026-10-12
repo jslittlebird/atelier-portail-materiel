@@ -1,0 +1,11 @@
+name: Ticket support
+description: Une demande d'aide d'un utilisateur du portail
+labels: ["type:support"]
+body:
+  - type: textarea
+    id: demande
+    attributes: { label: Demande de l'utilisateur }
+    validations: { required: true }
+  - type: input
+    id: service
+    attributes: { label: Service }

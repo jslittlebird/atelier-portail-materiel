@@ -1,0 +1,6 @@
+{
+  "name": "conventions-dsi",
+  "version": "0.1.0",
+  "description": "Exemple de plugin d'équipe DSI : conventions de revue et transformation de tickets en user stories.",
+  "author": { "name": "Little Bird" }
+}

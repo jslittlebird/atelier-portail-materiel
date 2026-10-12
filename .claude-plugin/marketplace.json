@@ -1,0 +1,7 @@
+{
+  "name": "atelier-ia-dsi",
+  "owner": { "name": "Little Bird" },
+  "plugins": [
+    { "name": "conventions-dsi", "source": "./plugins/conventions-dsi", "description": "Conventions de revue et tickets vers stories (exemple pédagogique)" }
+  ]
+}

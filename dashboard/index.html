@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau de bord du projet · Portail matériel IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#1B1929;--accent:#FFE6A7;--white:#fff;--dim:rgba(255,255,255,.55);--line:rgba(255,230,167,.18);
+--ok:rgba(74,222,128,.9);--ko:rgba(248,113,113,.9);--wip:rgba(255,230,167,.9);
+--sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;--serif:'Instrument Serif',Georgia,serif}
+html,body{background:var(--bg);color:var(--white);font-family:var(--sans)}
+body{padding:28px 40px;max-width:1500px;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+h1{color:var(--accent);font-size:clamp(1.5rem,2.4vw,2.1rem);font-weight:700}
+.sub{font-family:var(--serif);font-style:italic;font-size:1.25rem;opacity:.8;margin-top:4px}
+.meta{font-size:.85rem;color:var(--dim);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.meta input{background:transparent;border:1px solid var(--line);color:var(--white);border-radius:6px;padding:5px 8px;font:inherit;width:230px}
+button{font:inherit;font-weight:600;border-radius:8px;padding:7px 12px;cursor:pointer;border:1px solid var(--accent);background:transparent;color:var(--accent)}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:22px}
+.kpi{border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.kpi .v{font-size:2.3rem;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+.kpi .l{color:var(--dim);font-size:.9rem;margin-top:4px}
+.groups{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px}
+.panel{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:rgba(255,230,167,.03)}
+.panel h2{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;font-weight:600}
+.steps{display:flex;gap:6px;margin:6px 0 14px}
+.step{flex:1;text-align:center;font-size:.72rem;padding:6px 2px;border-radius:6px;border:1px solid var(--line);color:var(--dim)}
+.step.done{background:rgba(74,222,128,.14);border-color:rgba(74,222,128,.45);color:var(--white)}
+.item{display:flex;gap:8px;align-items:baseline;font-size:.92rem;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.item a{color:var(--white);text-decoration:none}.item a:hover{text-decoration:underline}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;transform:translateY(-1px)}
+.dot.open{background:var(--wip)}.dot.closed,.dot.merged{background:var(--ok)}.dot.fail{background:var(--ko)}
+.tag{font-size:.72rem;color:var(--dim);margin-left:auto;white-space:nowrap}
+.bottom{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+.empty{color:var(--dim);font-size:.9rem}
+.err{color:var(--ko);font-size:.9rem;margin-bottom:12px}
+footer{margin-top:20px;color:var(--dim);font-size:.8rem;display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Tableau de bord du projet</h1>
+    <p class="sub">Portail de demandes de matériel IT · sprint du 13 octobre</p>
+  </div>
+  <div class="meta">
+    <span id="repoTxt"></span>
+    <input id="token" type="password" placeholder="Jeton GitHub (facultatif)" title="Facultatif : augmente la limite de 60 appels par heure. Lecture seule suffit.">
+    <button id="refresh">Rafraîchir</button>
+    <span id="updated"></span>
+  </div>
+</header>
+<div class="err" id="err"></div>
+<section class="kpis">
+  <div class="kpi"><div class="v" id="kStories">–</div><div class="l">user stories créées</div></div>
+  <div class="kpi"><div class="v" id="kDone">–</div><div class="l">stories terminées</div></div>
+  <div class="kpi"><div class="v" id="kPR">–</div><div class="l">pull requests ouvertes</div></div>
+  <div class="kpi"><div class="v" id="kMerged">–</div><div class="l">pull requests fusionnées</div></div>
+  <div class="kpi"><div class="v" id="kSupport">–</div><div class="l">tickets support ouverts</div></div>
+</section>
+<section class="groups" id="groups"></section>
+<section class="bottom">
+  <div class="panel"><h2>Activité récente</h2><div id="activity"></div></div>
+  <div class="panel"><h2>Intégration continue</h2><div id="ci"></div></div>
+</section>
+<footer><span>Données lues en direct depuis l'API GitHub · rafraîchissement automatique toutes les 2 minutes</span><span>Little Bird</span></footer>
+<script>
+// Dépôt lu : paramètre ?repo=proprietaire/nom, sinon déduit de l'adresse GitHub Pages (proprietaire.github.io/nom).
+const params = new URLSearchParams(location.search);
+function repoParDefaut(){
+  const m = location.hostname.match(/^([^.]+)\.github\.io$/);
+  const seg = location.pathname.split('/').filter(Boolean)[0];
+  return m && seg ? m[1] + '/' + seg : '';
+}
+const REPO = params.get('repo') || repoParDefaut();
+const GROUPES = [
+  { n: 1, nom: 'Groupe 1 · E1 Catalogue et demande' },
+  { n: 2, nom: 'Groupe 2 · E2 Validation et suivi' },
+  { n: 3, nom: 'Groupe 3 · E3 Stock et livraison' }
+];
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+let tokenSauve = '';
+try { tokenSauve = localStorage.getItem('dash-token') || ''; } catch(e) {}
+$('token').value = tokenSauve;
+$('token').onchange = () => { try { localStorage.setItem('dash-token', $('token').value); } catch(e) {} charger(); };
+$('repoTxt').textContent = REPO ? REPO : 'Dépôt non défini : ajoutez ?repo=proprietaire/nom';
+
+async function gh(path){
+  const h = { 'Accept': 'application/vnd.github+json' };
+  const t = $('token').value.trim(); if (t) h['Authorization'] = 'Bearer ' + t;
+  const r = await fetch('https://api.github.com/repos/' + REPO + path, { headers: h });
+  if (!r.ok) throw new Error('GitHub ' + r.status + (r.status === 403 ? ' (limite d\'appels atteinte : ajoutez un jeton)' : ''));
+  return r.json();
+}
+const labels = it => (it.labels || []).map(l => typeof l === 'string' ? l : l.name);
+const groupeDe = it => { const g = labels(it).find(l => /^groupe:\d$/.test(l)); return g ? +g.split(':')[1] : 0; };
+const aLabel = (it, l) => labels(it).includes(l);
+
+function rendre(issues, pulls, runs){
+  const stories = issues.filter(i => !i.pull_request && aLabel(i, 'type:story') && !aLabel(i, 'animateur'));
+  const support = issues.filter(i => !i.pull_request && aLabel(i, 'type:support') && i.state === 'open');
+  $('kStories').textContent = stories.length;
+  $('kDone').textContent = stories.filter(s => s.state === 'closed').length;
+  $('kPR').textContent = pulls.filter(p => p.state === 'open').length;
+  $('kMerged').textContent = pulls.filter(p => p.merged_at).length;
+  $('kSupport').textContent = support.length;
+
+  $('groups').innerHTML = GROUPES.map(g => {
+    const st = stories.filter(s => groupeDe(s) === g.n);
+    const prs = pulls.filter(p => groupeDe(p) === g.n || new RegExp('groupe[- ]?' + g.n, 'i').test(p.head.ref + ' ' + p.title));
+    const prete = st.some(s => aLabel(s, 'pret'));
+    const etapes = [
+      ['Specs', st.length > 0], ['Backlog', st.length >= 2], ['Plan', prete],
+      ['Pull request', prs.length > 0], ['Fusionnée', prs.some(p => p.merged_at)]
+    ];
+    const lignes = st.map(s => '<div class="item"><span class="dot ' + s.state + '"></span><a href="' + s.html_url + '" target="_blank">#' + s.number + ' ' + esc(s.title) + '</a></div>')
+      .concat(prs.map(p => '<div class="item"><span class="dot ' + (p.merged_at ? 'merged' : 'open') + '"></span><a href="' + p.html_url + '" target="_blank">PR #' + p.number + ' ' + esc(p.title) + '</a><span class="tag">' + (p.merged_at ? 'fusionnée' : 'ouverte') + '</span></div>'));
+    return '<div class="panel"><h2>' + esc(g.nom) + '</h2><div class="steps">' +
+      etapes.map(([n, ok]) => '<div class="step' + (ok ? ' done' : '') + '">' + n + '</div>').join('') + '</div>' +
+      (lignes.length ? lignes.join('') : '<p class="empty">Pas encore de story ni de pull request.</p>') + '</div>';
+  }).join('');
+
+  const evts = issues.concat(pulls.map(p => Object.assign({}, p, { pull_request: true })))
+    .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)).slice(0, 10);
+  $('activity').innerHTML = evts.length ? evts.map(e => '<div class="item"><span class="dot ' + (e.merged_at ? 'merged' : e.state) + '"></span><a href="' + e.html_url + '" target="_blank">' + (e.pull_request ? 'PR ' : '') + '#' + e.number + ' ' + esc(e.title) + '</a><span class="tag">' + new Date(e.updated_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) + '</span></div>').join('') : '<p class="empty">Aucune activité.</p>';
+
+  const r = (runs.workflow_runs || []).slice(0, 8);
+  $('ci').innerHTML = r.length ? r.map(x => {
+    const etat = x.status !== 'completed' ? 'open' : (x.conclusion === 'success' ? 'closed' : 'fail');
+    const lib = x.status !== 'completed' ? 'en cours' : (x.conclusion === 'success' ? 'réussie' : 'échec');
+    return '<div class="item"><span class="dot ' + etat + '"></span><a href="' + x.html_url + '" target="_blank">' + esc(x.display_title || x.name) + '</a><span class="tag">' + lib + ' · ' + esc(x.head_branch) + '</span></div>';
+  }).join('') : '<p class="empty">Aucune exécution.</p>';
+}
+
+async function charger(){
+  if (!REPO) return;
+  $('err').textContent = '';
+  try {
+    const [issues, pulls, runs] = await Promise.all([
+      gh('/issues?state=all&per_page=100'),
+      gh('/pulls?state=all&per_page=50'),
+      gh('/actions/runs?per_page=8')
+    ]);
+    rendre(issues.filter(i => !i.pull_request), pulls, runs);
+    $('updated').textContent = 'mis à jour ' + new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  } catch(e) { $('err').textContent = e.message; }
+}
+$('refresh').onclick = charger;
+charger();
+setInterval(charger, 120000);
+</script>
+</body>
+</html>

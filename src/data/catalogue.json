@@ -1,0 +1,11 @@
+[
+  { "id": "PC-14", "nom": "Ordinateur portable 14 pouces", "categorie": "Poste de travail", "stock": 6, "seuilAlerte": 3, "delaiJours": 5 },
+  { "id": "PC-16", "nom": "Ordinateur portable 16 pouces (profil technique)", "categorie": "Poste de travail", "stock": 2, "seuilAlerte": 2, "delaiJours": 10 },
+  { "id": "ECR-24", "nom": "Écran 24 pouces", "categorie": "Écran", "stock": 14, "seuilAlerte": 5, "delaiJours": 3 },
+  { "id": "ECR-27", "nom": "Écran 27 pouces", "categorie": "Écran", "stock": 4, "seuilAlerte": 3, "delaiJours": 7 },
+  { "id": "DOCK", "nom": "Station d'accueil USB-C", "categorie": "Accessoire", "stock": 9, "seuilAlerte": 4, "delaiJours": 3 },
+  { "id": "CASQUE", "nom": "Casque audio avec micro", "categorie": "Accessoire", "stock": 1, "seuilAlerte": 5, "delaiJours": 4 },
+  { "id": "CLAVIER", "nom": "Clavier et souris sans fil", "categorie": "Accessoire", "stock": 20, "seuilAlerte": 6, "delaiJours": 2 },
+  { "id": "TEL", "nom": "Téléphone mobile professionnel", "categorie": "Téléphonie", "stock": 3, "seuilAlerte": 3, "delaiJours": 8 },
+  { "id": "TERM-VHU", "nom": "Terminal durci pour centre VHU", "categorie": "Terrain", "stock": 0, "seuilAlerte": 2, "delaiJours": 21 }
+]

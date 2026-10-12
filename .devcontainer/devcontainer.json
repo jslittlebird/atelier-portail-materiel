@@ -1,0 +1,16 @@
+{
+  "name": "Portail matériel IT",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["anthropic.claude-code", "dbaeumer.vscode-eslint", "bradlc.vscode-tailwindcss"],
+      "settings": { "editor.formatOnSave": true }
+    }
+  },
+  "postCreateCommand": "npm ci",
+  "forwardPorts": [3000],
+  "portsAttributes": { "3000": { "label": "Application", "onAutoForward": "notify" } }
+}

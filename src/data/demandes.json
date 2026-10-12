@@ -1,0 +1,7 @@
+[
+  { "id": "D-001", "demandeur": "Camille Martin", "service": "Comptabilité", "articleId": "ECR-24", "quantite": 1, "motif": "Second écran pour les rapprochements", "statut": "soumise", "creeLe": "2026-10-05" },
+  { "id": "D-002", "demandeur": "Lucas Bernard", "service": "Centre VHU de Lyon", "articleId": "TERM-VHU", "quantite": 2, "motif": "Remplacement de terminaux cassés", "statut": "validee", "creeLe": "2026-10-02" },
+  { "id": "D-003", "demandeur": "Inès Petit", "service": "Achats", "articleId": "PC-14", "quantite": 1, "motif": "Arrivée d'une nouvelle collaboratrice", "statut": "en_preparation", "creeLe": "2026-09-29" },
+  { "id": "D-004", "demandeur": "Hugo Robert", "service": "Commercial", "articleId": "CASQUE", "quantite": 1, "motif": "Casque défectueux", "statut": "refusee", "creeLe": "2026-09-27", "commentaire": "Casque sous garantie : passer par le SAV" },
+  { "id": "D-005", "demandeur": "Sarah Durand", "service": "Direction", "articleId": "TEL", "quantite": 1, "motif": "Téléphone perdu", "statut": "livree", "creeLe": "2026-09-20" }
+]
