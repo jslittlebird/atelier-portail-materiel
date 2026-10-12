@@ -4,7 +4,7 @@
 
 ```bash
 # depuis le dossier du dépôt, gh connecté à ton compte
-gh repo create indra-atelier-portail-materiel --public --source . --push
+gh repo create atelier-portail-materiel --public --source . --push
 git push origin demo/compteurs-accueil
 ./scripts/initialiser-github.sh
 ```
@@ -19,7 +19,7 @@ Puis sur GitHub :
 ## Le matin du 13
 
 - [ ] LM Studio lancé, modèle GGUF chargé, serveur démarré ; page de démo testée
-- [ ] Tableau de bord ouvert : `https://<compte>.github.io/indra-atelier-portail-materiel/`
+- [ ] Tableau de bord ouvert : `https://<compte>.github.io/atelier-portail-materiel/`
 - [ ] Un Codespace ouvert sur son poste, Claude Code connecté
 - [ ] Branche `demo/compteurs-accueil` prête pour la démo de 14h20 ; skill `rediger-user-story` importé dans son compte Claude
 

@@ -24,7 +24,7 @@ label "priorite:haute" "e99695" "Priorité haute"
 label "pret"          "0e8a16" "Prêt à développer"
 
 echo "Jalon…"
-gh api "repos/$REPO/milestones" -f title="Sprint 1 · 13/10" -f description="Atelier IA DSI Indra" >/dev/null 2>&1 || true
+gh api "repos/$REPO/milestones" -f title="Sprint 1 · 13/10" -f description="Atelier IA DSI" >/dev/null 2>&1 || true
 
 issue() { gh issue create --title "$1" --label "$2" --milestone "Sprint 1 · 13/10" --body "$3" >/dev/null; echo "  issue $1"; }
 echo "Epics…"
