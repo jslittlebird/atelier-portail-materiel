@@ -5,6 +5,7 @@
 | Je veux… | Je vais dans… | Rôle |
 | --- | --- | --- |
 | Changer de rôle (démonstration) | Le menu « Je suis » en haut à droite | Tous |
+| Voir combien de demandes sont à chaque étape | Les compteurs en haut de l'accueil | Tous |
 
 ## Demandeur
 
