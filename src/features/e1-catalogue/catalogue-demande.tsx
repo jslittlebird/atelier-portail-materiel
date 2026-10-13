@@ -2,28 +2,48 @@
 
 // Écran de l'epic E1 : le catalogue, puis la demande de l'article choisi.
 import * as React from "react";
-import { catalogue, type Article } from "@/lib/domaine";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { articleParId, catalogue, STATUTS, type Article, type Demande } from "@/lib/domaine";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
+import { FormulaireDemande } from "./formulaire-demande";
 import { ListeCatalogue } from "./liste-catalogue";
 import { categories, filtrerParCategorie, TOUTES_CATEGORIES } from "./regles";
 
+function Confirmation({ demande }: { demande: Demande }) {
+  return (
+    <Alert>
+      <AlertTitle>Demande {demande.id} soumise</AlertTitle>
+      <AlertDescription>
+        {articleParId(demande.articleId)?.nom} × {demande.quantite} · statut « {STATUTS[demande.statut]} »
+      </AlertDescription>
+    </Alert>
+  );
+}
+
 export function CatalogueDemande() {
   const [choisi, setChoisi] = React.useState<Article | null>(null);
+  const [creee, setCreee] = React.useState<Demande | null>(null);
   const [categorie, setCategorie] = React.useState(TOUTES_CATEGORIES);
+
+  function choisir(article: Article) {
+    setCreee(null);
+    setChoisi(article);
+  }
 
   return (
     <div className="space-y-6">
+      {creee && <Confirmation demande={creee} />}
       {choisi && (
-        <Card aria-label="Demande">
-          <CardHeader className="flex items-center justify-between">
-            <CardTitle>Demander : {choisi.nom}</CardTitle>
-            <Button variant="ghost" size="sm" onClick={() => setChoisi(null)}>Fermer</Button>
-          </CardHeader>
-          <CardContent className="text-muted-foreground text-sm">Formulaire de demande à venir (E1-3).</CardContent>
-        </Card>
+        <FormulaireDemande
+          key={choisi.id}
+          article={choisi}
+          onFermer={() => setChoisi(null)}
+          onCreee={(demande) => {
+            setCreee(demande);
+            setChoisi(null);
+          }}
+        />
       )}
       <div className="max-w-xs space-y-2">
         <Label htmlFor="filtre-categorie">Catégorie</Label>
@@ -34,7 +54,7 @@ export function CatalogueDemande() {
           ))}
         </NativeSelect>
       </div>
-      <ListeCatalogue articles={filtrerParCategorie(catalogue, categorie)} onDemander={setChoisi} />
+      <ListeCatalogue articles={filtrerParCategorie(catalogue, categorie)} onDemander={choisir} />
     </div>
   );
 }
