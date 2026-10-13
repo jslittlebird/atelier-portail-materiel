@@ -51,3 +51,50 @@ test.describe("E1-2 · filtrer par catégorie", () => {
     await expect(lignes).toHaveCount(10); // en-tête + 9 articles
   });
 });
+
+test.describe("E1-3 · créer une demande", () => {
+  async function ouvrirDemandeEnManager(page: Page, article = "Écran 24 pouces") {
+    await page.goto("/catalogue");
+    await page.getByLabel("Rôle").selectOption("manager");
+    await page.getByRole("button", { name: `Demander ${article}` }).click();
+  }
+
+  test("une demande valide est créée au statut Soumise avec son numéro", async ({ page }) => {
+    await ouvrirDemandeEnManager(page);
+    await page.getByLabel("Quantité").fill("2");
+    await page.getByLabel("Motif").fill("Second écran pour le nouvel arrivant");
+    await page.getByRole("button", { name: "Soumettre la demande" }).click();
+    await expect(page.getByText("Demande D-006 soumise")).toBeVisible();
+    await expect(page.getByText("Écran 24 pouces × 2 · statut « Soumise »")).toBeVisible();
+  });
+
+  test("un motif vide ou trop court affiche une erreur et ne crée pas de demande", async ({ page }) => {
+    await ouvrirDemandeEnManager(page);
+    await page.getByRole("button", { name: "Soumettre la demande" }).click();
+    await expect(page.getByText("Le motif doit contenir au moins 10 caractères.")).toBeVisible();
+    await page.getByLabel("Motif").fill("court");
+    await page.getByRole("button", { name: "Soumettre la demande" }).click();
+    await expect(page.getByText("Le motif doit contenir au moins 10 caractères.")).toBeVisible();
+    await expect(page.getByText(/Demande D-\d+ soumise/)).toHaveCount(0);
+    // Aucune demande n'a été créée : la suivante prend bien le numéro D-006.
+    await page.getByLabel("Motif").fill("Second écran pour le nouvel arrivant");
+    await page.getByRole("button", { name: "Soumettre la demande" }).click();
+    await expect(page.getByText("Demande D-006 soumise")).toBeVisible();
+  });
+
+  test("une quantité hors de 1 à 5 affiche une erreur", async ({ page }) => {
+    await ouvrirDemandeEnManager(page);
+    await page.getByLabel("Quantité").fill("6");
+    await page.getByLabel("Motif").fill("Second écran pour le nouvel arrivant");
+    await page.getByRole("button", { name: "Soumettre la demande" }).click();
+    await expect(page.getByText("La quantité doit être un nombre entier entre 1 et 5.")).toBeVisible();
+    await expect(page.getByText(/Demande D-\d+ soumise/)).toHaveCount(0);
+  });
+
+  test("hors du rôle Manager, le formulaire n'est pas proposé", async ({ page }) => {
+    await page.goto("/catalogue");
+    await page.getByRole("button", { name: "Demander Écran 24 pouces" }).click();
+    await expect(page.getByText("Choisissez « Manager » dans le menu « Je suis »")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Soumettre la demande" })).toHaveCount(0);
+  });
+});

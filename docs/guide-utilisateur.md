@@ -6,6 +6,7 @@
 | --- | --- | --- |
 | Changer de rôle (démonstration) | Le menu « Je suis » en haut à droite | Tous |
 | Consulter le catalogue du matériel | Le menu « Catalogue (E1) » | Tous |
+| Demander du matériel | Le bouton « Demander » d'un article du catalogue | Manager |
 
 ## Demandeur
 
@@ -16,6 +17,18 @@
 3. Choisissez une catégorie dans la liste « Catégorie » pour n'afficher que ce type de matériel. Choisissez « Toutes les catégories » pour tout revoir.
 4. Repérez les articles marqués « Indisponible » : ils sont en rupture, mais restent affichés.
 5. Cliquez sur « Demander » pour ouvrir la demande de l'article. Cliquez sur « Fermer » pour revenir au catalogue.
+
+### Demander du matériel
+
+La demande est réservée aux managers : choisissez « Manager » dans le menu « Je suis ».
+
+1. Dans le catalogue, cliquez sur « Demander » à côté de l'article voulu.
+2. Saisissez la quantité : entre 1 et 5.
+3. Expliquez le motif en au moins 10 caractères.
+4. Cliquez sur « Soumettre la demande ».
+5. Notez le numéro affiché (par exemple « Demande D-006 soumise ») : la demande est au statut « Soumise » et part en validation.
+
+Si un champ est mal rempli, un message rouge l'indique sous le champ et la demande n'est pas envoyée.
 
 ## Manager
 
