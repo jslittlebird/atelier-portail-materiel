@@ -44,7 +44,12 @@ Réservé aux managers : choisissez « Manager » dans le menu « Je suis ».
    - Pour chaque application nécessaire : choisissez-la dans « Application à ajouter », cliquez sur « Ajouter l'application », puis choisissez son « Profil de référence ». C'est la personne dont les droits serviront de modèle. Tapez les premières lettres de son nom dans « Rechercher un profil » pour la trouver vite.
    - Pour chaque répertoire partagé, saisissez son chemin et cliquez sur « Ajouter le répertoire ». Cliquez sur « Retirer » pour l'enlever.
 3. Cliquez sur « Suivant ». Si un champ manque, un message rouge l'indique et vous restez à l'étape 1.
-4. Cliquez sur « Précédent » pour revenir à l'étape 1 : votre saisie est conservée.
+4. Étape 2 « Matériel » : cochez le matériel nécessaire (un exemplaire de chacun). Décochez pour retirer. Un article marqué « Indisponible » est en rupture de stock : vous pouvez le demander, mais la livraison prendra plus de temps.
+5. Cliquez sur « Suivant ». Il faut au moins un matériel.
+6. Étape 3 « Récapitulatif » : vérifiez le nouvel arrivant, la date d'arrivée, le service, les applications, les répertoires et le matériel.
+7. Cliquez sur « Soumettre le dossier ». Le message affiche le numéro du dossier et celui de chaque demande (par exemple « Dossier O-001 soumis : D-006, D-007 »). Il y a une demande par matériel, au statut « Soumise ».
+
+À tout moment, cliquez sur « Précédent » pour revenir en arrière : votre saisie est conservée.
 
 ## Manager
 

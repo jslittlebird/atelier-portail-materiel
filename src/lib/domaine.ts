@@ -29,6 +29,16 @@ export const STATUTS: Record<Statut, string> = {
   livree: "Livrée",
 };
 
+/** Dossier d'arrivée d'un nouvel arrivant (E1-5, E1-6) : une demande par matériel, toutes liées au même dossier. */
+export type Onboarding = {
+  dossierId: string;
+  /** Date d'arrivée, AAAA-MM-JJ. */
+  dateArrivee: string;
+  /** Applications à ouvrir, avec le nom de la personne dont les droits servent de modèle. */
+  applications: { application: string; profilReference: string }[];
+  repertoires: string[];
+};
+
 export type Demande = {
   id: string;
   demandeur: string;
@@ -41,6 +51,8 @@ export type Demande = {
   commentaire?: string;
   /** Personne pour qui le matériel est demandé (demande d'onboarding, E1-4). Optionnel. */
   nouvelArrivant?: { prenom: string; nom: string };
+  /** Dossier d'arrivée auquel la demande appartient (E1-6). Optionnel. */
+  onboarding?: Onboarding;
 };
 
 export const catalogue: Article[] = catalogueInitial;

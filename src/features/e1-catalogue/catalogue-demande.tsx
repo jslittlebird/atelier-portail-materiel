@@ -25,29 +25,56 @@ function Confirmation({ demande }: { demande: Demande }) {
   );
 }
 
+function ConfirmationDossier({ demandes }: { demandes: Demande[] }) {
+  const { dossierId } = demandes[0].onboarding!;
+  const { prenom, nom } = demandes[0].nouvelArrivant!;
+  return (
+    <Alert>
+      <AlertTitle>Dossier {dossierId} soumis : {demandes.map((d) => d.id).join(", ")}</AlertTitle>
+      <AlertDescription>
+        Arrivée de {prenom} {nom} : {demandes.length} demande{demandes.length > 1 ? "s" : ""} de matériel au statut « {STATUTS.soumise} ».
+      </AlertDescription>
+    </Alert>
+  );
+}
+
 export function CatalogueDemande() {
   const [choisi, setChoisi] = React.useState<Article | null>(null);
   const [creee, setCreee] = React.useState<Demande | null>(null);
   const [categorie, setCategorie] = React.useState(TOUTES_CATEGORIES);
   const [assistantOuvert, setAssistantOuvert] = React.useState(false);
+  const [dossier, setDossier] = React.useState<Demande[] | null>(null);
 
   function choisir(article: Article) {
     setCreee(null);
+    setDossier(null);
     setChoisi(article);
   }
 
-  if (assistantOuvert) return <AssistantOnboarding onFermer={() => setAssistantOuvert(false)} />;
+  if (assistantOuvert) {
+    return (
+      <AssistantOnboarding
+        onFermer={() => setAssistantOuvert(false)}
+        onSoumis={(demandes) => {
+          setDossier(demandes);
+          setAssistantOuvert(false);
+        }}
+      />
+    );
+  }
 
   return (
     <div className="space-y-6">
       <Button
         onClick={() => {
           setCreee(null);
+          setDossier(null);
           setAssistantOuvert(true);
         }}
       >
         Préparer l&apos;arrivée d&apos;un nouvel arrivant
       </Button>
+      {dossier && <ConfirmationDossier demandes={dossier} />}
       {creee && <Confirmation demande={creee} />}
       {choisi && (
         <FormulaireDemande
