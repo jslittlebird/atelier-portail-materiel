@@ -3,3 +3,4 @@
 | Date | Issue | Changement |
 | --- | --- | --- |
 | 2026-10-12 | — | Socle E0 : navigation, rôles, modèle de demande, données fictives |
+| 2026-10-13 | #22 | Catalogue consultable : nom, catégorie, stock, délai, articles indisponibles signalés |
