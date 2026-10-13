@@ -26,3 +26,28 @@ test.describe("E1-1 · consulter le catalogue", () => {
     await expect(page.getByText("Demander : Écran 27 pouces")).toBeVisible();
   });
 });
+
+test.describe("E1-2 · filtrer par catégorie", () => {
+  test("le filtre propose toutes les catégories une seule fois", async ({ page }) => {
+    await page.goto("/catalogue");
+    await expect(page.getByLabel("Catégorie").locator("option")).toHaveText([
+      "Toutes les catégories",
+      "Poste de travail",
+      "Écran",
+      "Accessoire",
+      "Téléphonie",
+      "Terrain",
+    ]);
+  });
+
+  test("choisir « Écran » n'affiche que les écrans, « Toutes les catégories » affiche tout", async ({ page }) => {
+    await page.goto("/catalogue");
+    const lignes = page.getByRole("table", { name: "Catalogue" }).getByRole("row");
+    await page.getByLabel("Catégorie").selectOption("Écran");
+    await expect(lignes).toHaveCount(3); // en-tête + 2 écrans
+    await expect(ligne(page, "Écran 24 pouces")).toBeVisible();
+    await expect(ligne(page, "Écran 27 pouces")).toBeVisible();
+    await page.getByLabel("Catégorie").selectOption({ label: "Toutes les catégories" });
+    await expect(lignes).toHaveCount(10); // en-tête + 9 articles
+  });
+});

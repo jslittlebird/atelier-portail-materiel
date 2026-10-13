@@ -13,8 +13,9 @@
 
 1. Ouvrez « Catalogue (E1) » dans le menu.
 2. Lisez pour chaque article : sa catégorie, le stock disponible et le délai de livraison.
-3. Repérez les articles marqués « Indisponible » : ils sont en rupture, mais restent affichés.
-4. Cliquez sur « Demander » pour ouvrir la demande de l'article. Cliquez sur « Fermer » pour revenir au catalogue.
+3. Choisissez une catégorie dans la liste « Catégorie » pour n'afficher que ce type de matériel. Choisissez « Toutes les catégories » pour tout revoir.
+4. Repérez les articles marqués « Indisponible » : ils sont en rupture, mais restent affichés.
+5. Cliquez sur « Demander » pour ouvrir la demande de l'article. Cliquez sur « Fermer » pour revenir au catalogue.
 
 ## Manager
 
