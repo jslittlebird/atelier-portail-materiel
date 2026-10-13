@@ -1,0 +1,9 @@
+[
+  { "id": "E-01", "nom": "Karim Lefèvre", "service": "Centre VHU de Lyon" },
+  { "id": "E-02", "nom": "Mathilde Roux", "service": "Comptabilité" },
+  { "id": "E-03", "nom": "Thomas Garnier", "service": "Commercial" },
+  { "id": "E-04", "nom": "Émilie Marchand", "service": "Achats" },
+  { "id": "E-05", "nom": "Julien Faure", "service": "DSI" },
+  { "id": "E-06", "nom": "Sarah Mercier", "service": "Ressources humaines" },
+  { "id": "E-07", "nom": "Nicolas Blanc", "service": "Centre VHU de Marseille" }
+]

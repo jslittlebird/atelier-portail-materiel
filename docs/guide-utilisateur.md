@@ -23,10 +23,12 @@
 La demande est réservée aux managers : choisissez « Manager » dans le menu « Je suis ».
 
 1. Dans le catalogue, cliquez sur « Demander » à côté de l'article voulu.
-2. Saisissez la quantité : entre 1 et 5.
-3. Expliquez le motif en au moins 10 caractères.
-4. Cliquez sur « Soumettre la demande ».
-5. Notez le numéro affiché (par exemple « Demande D-006 soumise ») : la demande est au statut « Soumise » et part en validation.
+2. Choisissez votre nom dans la liste « Émetteur ». Pour le trouver vite, tapez les premières lettres dans « Rechercher un émetteur ».
+3. Saisissez le prénom et le nom du nouvel arrivant.
+4. Saisissez la quantité : entre 1 et 5.
+5. Expliquez le motif en au moins 10 caractères.
+6. Cliquez sur « Soumettre la demande ».
+7. Vérifiez le récapitulatif : numéro de la demande (par exemple « Demande D-006 soumise »), émetteur et nouvel arrivant. La demande est au statut « Soumise » et part en validation.
 
 Si un champ est mal rempli, un message rouge l'indique sous le champ et la demande n'est pas envoyée.
 

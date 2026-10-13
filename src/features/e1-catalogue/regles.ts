@@ -27,14 +27,33 @@ export const QUANTITE_MAX = 5;
 export const MOTIF_MIN = 10;
 
 /** Saisie du formulaire de demande, telle que tapée par l'utilisateur. */
-export type SaisieDemande = { quantite: string; motif: string };
+export type SaisieDemande = {
+  emetteurId: string;
+  prenom: string;
+  nom: string;
+  quantite: string;
+  motif: string;
+};
 export type ErreursDemande = Partial<Record<keyof SaisieDemande, string>>;
 
 /** Personne qui émet la demande (son nom et son service sont enregistrés dans la demande). */
-export type Emetteur = { nom: string; service: string };
+export type Emetteur = { id: string; nom: string; service: string };
+
+/** Minuscules et sans accents, pour une recherche tolérante (« emilie » trouve « Émilie »). */
+function normaliser(texte: string): string {
+  return texte.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().trim();
+}
+
+export function filtrerEmetteurs(emetteurs: Emetteur[], recherche: string): Emetteur[] {
+  const cle = normaliser(recherche);
+  return emetteurs.filter((e) => normaliser(e.nom).includes(cle));
+}
 
 export function validerDemande(saisie: SaisieDemande): ErreursDemande {
   const erreurs: ErreursDemande = {};
+  if (!saisie.emetteurId) erreurs.emetteurId = "Choisissez l'émetteur de la demande.";
+  if (!saisie.prenom.trim()) erreurs.prenom = "Saisissez le prénom du nouvel arrivant.";
+  if (!saisie.nom.trim()) erreurs.nom = "Saisissez le nom du nouvel arrivant.";
   const quantite = Number(saisie.quantite);
   if (saisie.quantite.trim() === "" || !Number.isInteger(quantite) || quantite < QUANTITE_MIN || quantite > QUANTITE_MAX) {
     erreurs.quantite = `La quantité doit être un nombre entier entre ${QUANTITE_MIN} et ${QUANTITE_MAX}.`;
@@ -66,5 +85,6 @@ export function creerDemande(
     motif: saisie.motif.trim(),
     statut: "soumise",
     creeLe: aujourdhui.toISOString().slice(0, 10),
+    nouvelArrivant: { prenom: saisie.prenom.trim(), nom: saisie.nom.trim() },
   };
 }
