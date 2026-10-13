@@ -31,7 +31,7 @@ describe("E1-1 · consulter le catalogue", () => {
 
 describe("E1-2 · filtrer par catégorie", () => {
   it("liste chaque catégorie une seule fois", () => {
-    expect(categories(catalogue)).toEqual(["Poste de travail", "Écran", "Accessoire", "Téléphonie", "Terrain"]);
+    expect(categories(catalogue)).toEqual(["Poste de travail", "Écran", "Accessoire", "Téléphonie", "Terrain", "Périphérique"]);
   });
 
   it("ne garde que les articles de la catégorie choisie", () => {

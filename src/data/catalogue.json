@@ -7,5 +7,9 @@
   { "id": "CASQUE", "nom": "Casque audio avec micro", "categorie": "Accessoire", "stock": 1, "seuilAlerte": 5, "delaiJours": 4 },
   { "id": "CLAVIER", "nom": "Clavier et souris sans fil", "categorie": "Accessoire", "stock": 20, "seuilAlerte": 6, "delaiJours": 2 },
   { "id": "TEL", "nom": "Téléphone mobile professionnel", "categorie": "Téléphonie", "stock": 3, "seuilAlerte": 3, "delaiJours": 8 },
-  { "id": "TERM-VHU", "nom": "Terminal durci pour centre VHU", "categorie": "Terrain", "stock": 0, "seuilAlerte": 2, "delaiJours": 21 }
+  { "id": "TERM-VHU", "nom": "Terminal durci pour centre VHU", "categorie": "Terrain", "stock": 0, "seuilAlerte": 2, "delaiJours": 21 },
+  { "id": "SCANNER", "nom": "Scanner de documents", "categorie": "Périphérique", "stock": 5, "seuilAlerte": 2, "delaiJours": 6 },
+  { "id": "IMPRIMANTE", "nom": "Imprimante de bureau", "categorie": "Périphérique", "stock": 3, "seuilAlerte": 2, "delaiJours": 7 },
+  { "id": "SOURIS", "nom": "Souris filaire", "categorie": "Accessoire", "stock": 25, "seuilAlerte": 8, "delaiJours": 2 },
+  { "id": "POCHETTE", "nom": "Pochette de transport pour portable", "categorie": "Accessoire", "stock": 12, "seuilAlerte": 4, "delaiJours": 3 }
 ]

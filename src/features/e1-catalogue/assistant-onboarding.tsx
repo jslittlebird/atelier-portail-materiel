@@ -1,48 +1,72 @@
 "use client";
 
-// Assistant « Nouvel arrivant » : étape 1 Accès (E1-5), étape 2 Matériel (E1-6). Réservé au rôle Manager.
+// Assistant « Nouvel arrivant » : étape 1 Accès (E1-5), étape 2 Matériel et récapitulatif (E1-6). Réservé au rôle Manager.
 import * as React from "react";
+import { articleParId, type Demande } from "@/lib/domaine";
 import { useStore } from "@/lib/store";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
-import { ANNUAIRE, APPLICATIONS, EMETTEURS, SERVICES } from "./annuaire";
+import { ANNUAIRE, APPLICATIONS, EMETTEURS, personneParId, SERVICES } from "./annuaire";
 import { ChoixPersonne } from "./choix-personne";
 import { MessageErreur } from "./message-erreur";
 import {
   ajouterApplication,
   ajouterRepertoire,
+  basculerMateriel,
   choisirProfil,
+  creerDemandesOnboarding,
+  dateFrancaise,
+  MATERIELS_ONBOARDING,
   retirerApplication,
   retirerRepertoire,
   SAISIE_VIDE,
   validerAcces,
+  validerMateriel,
   type ErreursAcces,
   type SaisieOnboarding,
 } from "./onboarding";
-import { dateISO, estValide } from "./regles";
+import { dateISO, estIndisponible, estValide } from "./regles";
 
-const ETAPES = ["Accès", "Matériel"];
+const ETAPES = ["Accès", "Matériel", "Récapitulatif"];
 
-type Props = { onFermer: () => void };
+type Props = {
+  onFermer: () => void;
+  /** Appelé avec les demandes créées (une par matériel) après l'envoi du dossier. */
+  onSoumis: (demandes: Demande[]) => void;
+};
 
-export function AssistantOnboarding({ onFermer }: Props) {
-  const { role } = useStore();
+export function AssistantOnboarding({ onFermer, onSoumis }: Props) {
+  const { role, demandes, setDemandes } = useStore();
   const [etape, setEtape] = React.useState(1);
   const [saisie, setSaisie] = React.useState<SaisieOnboarding>(SAISIE_VIDE);
   const [erreurs, setErreurs] = React.useState<ErreursAcces>({});
+  const [erreurMateriel, setErreurMateriel] = React.useState<string>();
 
   function modifier(champs: Partial<SaisieOnboarding>) {
     setSaisie((s) => ({ ...s, ...champs }));
   }
 
   function suivant() {
-    const trouvees = validerAcces(saisie, dateISO(new Date()));
-    setErreurs(trouvees);
-    if (estValide(trouvees)) setEtape(2);
+    if (etape === 1) {
+      const trouvees = validerAcces(saisie, dateISO(new Date()));
+      setErreurs(trouvees);
+      if (estValide(trouvees)) setEtape(2);
+    } else {
+      const trouvee = validerMateriel(saisie).materiels;
+      setErreurMateriel(trouvee);
+      if (!trouvee) setEtape(3);
+    }
+  }
+
+  function soumettre() {
+    const creees = creerDemandesOnboarding(demandes, saisie);
+    setDemandes((d) => [...d, ...creees]);
+    onSoumis(creees);
   }
 
   return (
@@ -61,20 +85,16 @@ export function AssistantOnboarding({ onFermer }: Props) {
             <AlertDescription>Choisissez « Manager » dans le menu « Je suis » pour préparer une arrivée.</AlertDescription>
           </Alert>
         </CardContent>
-      ) : etape === 1 ? (
-        <>
-          <CardContent>
-            <EtapeAcces saisie={saisie} modifier={modifier} erreurs={erreurs} />
-          </CardContent>
-          <CardFooter className="justify-end">
-            <Button onClick={suivant}>Suivant</Button>
-          </CardFooter>
-        </>
       ) : (
         <>
-          <CardContent className="text-muted-foreground text-sm">Choix du matériel : à venir (E1-6).</CardContent>
-          <CardFooter>
-            <Button variant="outline" onClick={() => setEtape(1)}>Précédent</Button>
+          <CardContent>
+            {etape === 1 && <EtapeAcces saisie={saisie} modifier={modifier} erreurs={erreurs} />}
+            {etape === 2 && <EtapeMateriel saisie={saisie} modifier={modifier} erreur={erreurMateriel} />}
+            {etape === 3 && <Recapitulatif saisie={saisie} />}
+          </CardContent>
+          <CardFooter className="justify-between">
+            {etape > 1 ? <Button variant="outline" onClick={() => setEtape(etape - 1)}>Précédent</Button> : <span />}
+            {etape < 3 ? <Button onClick={suivant}>Suivant</Button> : <Button onClick={soumettre}>Soumettre le dossier</Button>}
           </CardFooter>
         </>
       )}
@@ -246,5 +266,69 @@ function SectionRepertoires({ saisie, modifier }: Omit<PropsEtape, "erreurs">) {
         </ul>
       )}
     </section>
+  );
+}
+
+function EtapeMateriel({ saisie, modifier, erreur }: Omit<PropsEtape, "erreurs"> & { erreur?: string }) {
+  return (
+    <fieldset className="space-y-3" aria-describedby="erreur-materiels">
+      <legend className="mb-3 font-medium">Matériels pour le nouvel arrivant (un exemplaire de chacun)</legend>
+      {MATERIELS_ONBOARDING.map((id) => {
+        const article = articleParId(id);
+        if (!article) return null;
+        return (
+          <div key={id} className="flex items-center gap-3">
+            <input
+              id={`materiel-${id}`}
+              type="checkbox"
+              className="size-4"
+              checked={saisie.materiels.includes(id)}
+              onChange={() => modifier({ materiels: basculerMateriel(saisie.materiels, id) })}
+            />
+            <Label htmlFor={`materiel-${id}`}>{article.nom}</Label>
+            {estIndisponible(article) && <Badge variant="destructive">Indisponible</Badge>}
+          </div>
+        );
+      })}
+      <MessageErreur id="erreur-materiels" message={erreur} />
+    </fieldset>
+  );
+}
+
+function Recapitulatif({ saisie }: { saisie: SaisieOnboarding }) {
+  const emetteur = personneParId(saisie.emetteurId);
+  return (
+    <dl aria-label="Récapitulatif" className="grid gap-x-6 gap-y-3 text-sm md:grid-cols-[12rem_1fr]">
+      <dt className="text-muted-foreground">Nouvel arrivant</dt>
+      <dd>{saisie.prenom} {saisie.nom}</dd>
+      <dt className="text-muted-foreground">Arrivée</dt>
+      <dd>le {dateFrancaise(saisie.dateArrivee)}, service {saisie.service}</dd>
+      <dt className="text-muted-foreground">Émetteur</dt>
+      <dd>{emetteur?.nom} ({emetteur?.service})</dd>
+      <dt className="text-muted-foreground">Applications</dt>
+      <dd>
+        {saisie.applications.length === 0 ? "Aucune" : (
+          <ul>
+            {saisie.applications.map((a) => (
+              <li key={a.application}>{a.application} · profil de {personneParId(a.profilId)?.nom}</li>
+            ))}
+          </ul>
+        )}
+      </dd>
+      <dt className="text-muted-foreground">Répertoires</dt>
+      <dd>
+        {saisie.repertoires.length === 0 ? "Aucun" : (
+          <ul>
+            {saisie.repertoires.map((r) => <li key={r}><code>{r}</code></li>)}
+          </ul>
+        )}
+      </dd>
+      <dt className="text-muted-foreground">Matériels</dt>
+      <dd>
+        <ul>
+          {saisie.materiels.map((id) => <li key={id}>{articleParId(id)?.nom}</li>)}
+        </ul>
+      </dd>
+    </dl>
   );
 }

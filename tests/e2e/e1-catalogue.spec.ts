@@ -49,6 +49,7 @@ test.describe("E1-2 · filtrer par catégorie", () => {
       "Accessoire",
       "Téléphonie",
       "Terrain",
+      "Périphérique",
     ]);
   });
 
@@ -60,7 +61,7 @@ test.describe("E1-2 · filtrer par catégorie", () => {
     await expect(ligne(page, "Écran 24 pouces")).toBeVisible();
     await expect(ligne(page, "Écran 27 pouces")).toBeVisible();
     await page.getByLabel("Catégorie").selectOption({ label: "Toutes les catégories" });
-    await expect(lignes).toHaveCount(10); // en-tête + 9 articles
+    await expect(lignes).toHaveCount(14); // en-tête + 13 articles
   });
 });
 
@@ -143,19 +144,19 @@ test.describe("E1-4 · identifier l'émetteur et le nouvel arrivant", () => {
   });
 });
 
+async function ouvrirAssistant(page: Page) {
+  await page.goto("/catalogue");
+  await page.getByLabel("Rôle").selectOption("manager");
+  await page.getByRole("button", { name: "Préparer l'arrivée d'un nouvel arrivant" }).click();
+}
+
+async function remplirEtape1(page: Page) {
+  await remplirIdentite(page);
+  await page.getByLabel("Date d'arrivée").fill("2099-01-04");
+  await page.getByLabel("Service", { exact: true }).selectOption("Comptabilité");
+}
+
 test.describe("E1-5 · préparer les accès du nouvel arrivant", () => {
-  async function ouvrirAssistant(page: Page) {
-    await page.goto("/catalogue");
-    await page.getByLabel("Rôle").selectOption("manager");
-    await page.getByRole("button", { name: "Préparer l'arrivée d'un nouvel arrivant" }).click();
-  }
-
-  async function remplirEtape1(page: Page) {
-    await remplirIdentite(page);
-    await page.getByLabel("Date d'arrivée").fill("2099-01-04");
-    await page.getByLabel("Service", { exact: true }).selectOption("Comptabilité");
-  }
-
   test("sans les champs obligatoires, on reste à l'étape 1 et chaque champ est signalé", async ({ page }) => {
     await ouvrirAssistant(page);
     await page.getByRole("button", { name: "Suivant" }).click();
@@ -168,7 +169,7 @@ test.describe("E1-5 · préparer les accès du nouvel arrivant", () => {
     ]) {
       await expect(page.getByText(message)).toBeVisible();
     }
-    await expect(page.getByText("Étape 1 sur 2 : Accès")).toBeVisible();
+    await expect(page.getByText("Étape 1 sur 3 : Accès")).toBeVisible();
   });
 
   test("une date d'arrivée passée est refusée", async ({ page }) => {
@@ -177,7 +178,7 @@ test.describe("E1-5 · préparer les accès du nouvel arrivant", () => {
     await page.getByLabel("Date d'arrivée").fill("2020-01-06");
     await page.getByRole("button", { name: "Suivant" }).click();
     await expect(page.getByText("La date d'arrivée ne peut pas être dans le passé.")).toBeVisible();
-    await expect(page.getByText("Étape 1 sur 2 : Accès")).toBeVisible();
+    await expect(page.getByText("Étape 1 sur 3 : Accès")).toBeVisible();
   });
 
   test("applications avec profil de référence : recherche, profil obligatoire, plusieurs applications", async ({ page }) => {
@@ -206,7 +207,7 @@ test.describe("E1-5 · préparer les accès du nouvel arrivant", () => {
 
     await page.getByLabel("Profil de référence pour Paie et RH").selectOption({ label: "Manon Girard (Ressources humaines)" });
     await page.getByRole("button", { name: "Suivant" }).click();
-    await expect(page.getByText("Étape 2 sur 2 : Matériel")).toBeVisible();
+    await expect(page.getByText("Étape 2 sur 3 : Matériel")).toBeVisible();
 
     // Retour à l'étape 1 : la saisie est conservée.
     await page.getByRole("button", { name: "Précédent" }).click();
@@ -235,5 +236,67 @@ test.describe("E1-5 · préparer les accès du nouvel arrivant", () => {
     await page.getByRole("button", { name: "Préparer l'arrivée d'un nouvel arrivant" }).click();
     await expect(page.getByText("Choisissez « Manager » dans le menu « Je suis » pour préparer une arrivée.")).toBeVisible();
     await expect(page.getByRole("button", { name: "Suivant" })).toHaveCount(0);
+  });
+});
+
+test.describe("E1-6 · choisir le matériel du nouvel arrivant", () => {
+  async function allerAuMateriel(page: Page) {
+    await ouvrirAssistant(page);
+    await remplirEtape1(page);
+    await page.getByLabel("Application à ajouter").selectOption("Messagerie");
+    await page.getByRole("button", { name: "Ajouter l'application" }).click();
+    await page.getByLabel("Profil de référence pour Messagerie").selectOption({ label: "Camille Martin (Comptabilité)" });
+    await page.getByLabel("Répertoire", { exact: true }).fill("\\\\partage\\compta");
+    await page.getByRole("button", { name: "Ajouter le répertoire" }).click();
+    await page.getByRole("button", { name: "Suivant" }).click();
+    await expect(page.getByText("Étape 2 sur 3 : Matériel")).toBeVisible();
+  }
+
+  test("la liste propose les 8 matériels", async ({ page }) => {
+    await allerAuMateriel(page);
+    await expect(page.getByRole("checkbox")).toHaveCount(8);
+    for (const nom of ["Ordinateur portable 14 pouces", "Écran 24 pouces", "Téléphone mobile professionnel", "Scanner de documents",
+      "Imprimante de bureau", "Casque audio avec micro", "Souris filaire", "Pochette de transport pour portable"]) {
+      await expect(page.getByRole("checkbox", { name: nom })).toBeVisible();
+    }
+  });
+
+  test("sans matériel coché, on ne peut pas continuer", async ({ page }) => {
+    await allerAuMateriel(page);
+    await page.getByRole("button", { name: "Suivant" }).click();
+    await expect(page.getByText("Choisissez au moins un matériel.")).toBeVisible();
+    await expect(page.getByText("Étape 2 sur 3 : Matériel")).toBeVisible();
+  });
+
+  test("sélection multiple, décochage, retour arrière puis envoi du dossier", async ({ page }) => {
+    await allerAuMateriel(page);
+    for (const nom of ["Ordinateur portable 14 pouces", "Écran 24 pouces", "Souris filaire"]) {
+      await page.getByRole("checkbox", { name: nom }).check();
+    }
+    await page.getByRole("checkbox", { name: "Souris filaire" }).uncheck();
+
+    // Retour à l'étape 1 puis à l'étape 2 : tout est conservé.
+    await page.getByRole("button", { name: "Précédent" }).click();
+    await expect(page.getByLabel("Date d'arrivée")).toHaveValue("2099-01-04");
+    await page.getByRole("button", { name: "Suivant" }).click();
+    await expect(page.getByRole("checkbox", { name: "Ordinateur portable 14 pouces" })).toBeChecked();
+    await expect(page.getByRole("checkbox", { name: "Écran 24 pouces" })).toBeChecked();
+    await expect(page.getByRole("checkbox", { name: "Souris filaire" })).not.toBeChecked();
+
+    await page.getByRole("button", { name: "Suivant" }).click();
+    const recap = page.getByLabel("Récapitulatif");
+    await expect(page.getByText("Étape 3 sur 3 : Récapitulatif")).toBeVisible();
+    await expect(recap).toContainText("Léa Dupont");
+    await expect(recap).toContainText("le 04/01/2099, service Comptabilité");
+    await expect(recap).toContainText("Karim Lefèvre (Centre VHU de Lyon)");
+    await expect(recap).toContainText("Messagerie · profil de Camille Martin");
+    await expect(recap).toContainText("\\\\partage\\compta");
+    await expect(recap).toContainText("Ordinateur portable 14 pouces");
+    await expect(recap).toContainText("Écran 24 pouces");
+    await expect(recap).not.toContainText("Souris filaire");
+
+    await page.getByRole("button", { name: "Soumettre le dossier" }).click();
+    await expect(page.getByText("Dossier O-001 soumis : D-006, D-007")).toBeVisible();
+    await expect(page.getByText("Arrivée de Léa Dupont : 2 demandes de matériel au statut « Soumise ».")).toBeVisible();
   });
 });
