@@ -1,0 +1,14 @@
+[
+  { "id": "E-01", "nom": "Karim Lefèvre", "service": "Centre VHU de Lyon", "manager": true },
+  { "id": "E-02", "nom": "Mathilde Roux", "service": "Comptabilité", "manager": true },
+  { "id": "E-03", "nom": "Thomas Garnier", "service": "Commercial", "manager": true },
+  { "id": "E-04", "nom": "Émilie Marchand", "service": "Achats", "manager": true },
+  { "id": "E-05", "nom": "Julien Faure", "service": "DSI", "manager": true },
+  { "id": "E-06", "nom": "Sarah Mercier", "service": "Ressources humaines", "manager": true },
+  { "id": "E-07", "nom": "Nicolas Blanc", "service": "Centre VHU de Marseille", "manager": true },
+  { "id": "P-08", "nom": "Camille Martin", "service": "Comptabilité", "manager": false },
+  { "id": "P-09", "nom": "Lucas Bernard", "service": "Centre VHU de Lyon", "manager": false },
+  { "id": "P-10", "nom": "Inès Petit", "service": "Achats", "manager": false },
+  { "id": "P-11", "nom": "Hugo Robert", "service": "Commercial", "manager": false },
+  { "id": "P-12", "nom": "Manon Girard", "service": "Ressources humaines", "manager": false }
+]

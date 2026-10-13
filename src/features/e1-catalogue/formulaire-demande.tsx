@@ -9,23 +9,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
-import emetteursFictifs from "./emetteurs.json";
+import { EMETTEURS } from "./annuaire";
+import { ChoixPersonne } from "./choix-personne";
+import { MessageErreur } from "./message-erreur";
 import {
   creerDemande,
   estValide,
-  filtrerEmetteurs,
   QUANTITE_MAX,
   QUANTITE_MIN,
   validerDemande,
-  type Emetteur,
   type ErreursDemande,
   type SaisieDemande,
 } from "./regles";
-
-// Prototype : liste fictive à la place de l'annuaire de l'entreprise.
-const EMETTEURS: Emetteur[] = emetteursFictifs;
 
 type Props = {
   article: Article;
@@ -33,25 +29,10 @@ type Props = {
   onCreee: (demande: Demande) => void;
 };
 
-function MessageErreur({ id, message }: { id: string; message?: string }) {
-  if (!message) return null;
-  return <p id={id} className="text-destructive text-sm">{message}</p>;
-}
-
 export function FormulaireDemande({ article, onFermer, onCreee }: Props) {
   const { role, demandes, setDemandes } = useStore();
   const [saisie, setSaisie] = React.useState<SaisieDemande>({ emetteurId: "", prenom: "", nom: "", quantite: "1", motif: "" });
-  const [recherche, setRecherche] = React.useState("");
   const [erreurs, setErreurs] = React.useState<ErreursDemande>({});
-  const proposes = filtrerEmetteurs(EMETTEURS, recherche);
-
-  function rechercher(texte: string) {
-    setRecherche(texte);
-    // L'émetteur choisi ne doit pas rester sélectionné s'il ne correspond plus à la recherche.
-    if (!filtrerEmetteurs(EMETTEURS, texte).some((e) => e.id === saisie.emetteurId)) {
-      setSaisie({ ...saisie, emetteurId: "" });
-    }
-  }
 
   function soumettre(e: React.FormEvent) {
     e.preventDefault();
@@ -79,32 +60,16 @@ export function FormulaireDemande({ article, onFermer, onCreee }: Props) {
         ) : (
           <form onSubmit={soumettre} noValidate className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="recherche-emetteur">Rechercher un émetteur</Label>
-                <Input
-                  id="recherche-emetteur"
-                  type="search"
-                  placeholder="Premières lettres du nom"
-                  value={recherche}
-                  onChange={(e) => rechercher(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="emetteur">Émetteur</Label>
-                <NativeSelect
-                  id="emetteur"
-                  value={saisie.emetteurId}
-                  onChange={(e) => setSaisie({ ...saisie, emetteurId: e.target.value })}
-                  aria-invalid={!!erreurs.emetteurId}
-                  aria-describedby="erreur-emetteur"
-                >
-                  <option value="">{proposes.length ? "Choisir un émetteur" : "Aucun émetteur trouvé"}</option>
-                  {proposes.map((em) => (
-                    <option key={em.id} value={em.id}>{em.nom}</option>
-                  ))}
-                </NativeSelect>
-                <MessageErreur id="erreur-emetteur" message={erreurs.emetteurId} />
-              </div>
+              <ChoixPersonne
+                id="emetteur"
+                libelle="Émetteur"
+                libelleRecherche="Rechercher un émetteur"
+                invite="Choisir un émetteur"
+                personnes={EMETTEURS}
+                valeur={saisie.emetteurId}
+                onChange={(emetteurId) => setSaisie((s) => ({ ...s, emetteurId }))}
+                erreur={erreurs.emetteurId}
+              />
               <div className="space-y-2">
                 <Label htmlFor="prenom">Prénom du nouvel arrivant</Label>
                 <Input
