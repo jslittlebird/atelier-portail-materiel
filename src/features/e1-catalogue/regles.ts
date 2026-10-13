@@ -22,6 +22,13 @@ export function filtrerParCategorie(articles: Article[], categorie: string): Art
   return categorie === TOUTES_CATEGORIES ? articles : articles.filter((a) => a.categorie === categorie);
 }
 
+/** Date au format AAAA-MM-JJ, dans le fuseau du navigateur. */
+export function dateISO(date: Date): string {
+  const mois = String(date.getMonth() + 1).padStart(2, "0");
+  const jour = String(date.getDate()).padStart(2, "0");
+  return `${date.getFullYear()}-${mois}-${jour}`;
+}
+
 export const QUANTITE_MIN = 1;
 export const QUANTITE_MAX = 5;
 export const MOTIF_MIN = 10;
@@ -38,16 +45,6 @@ export type ErreursDemande = Partial<Record<keyof SaisieDemande, string>>;
 
 /** Personne qui émet la demande (son nom et son service sont enregistrés dans la demande). */
 export type Emetteur = { id: string; nom: string; service: string };
-
-/** Minuscules et sans accents, pour une recherche tolérante (« emilie » trouve « Émilie »). */
-function normaliser(texte: string): string {
-  return texte.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().trim();
-}
-
-export function filtrerEmetteurs(emetteurs: Emetteur[], recherche: string): Emetteur[] {
-  const cle = normaliser(recherche);
-  return emetteurs.filter((e) => normaliser(e.nom).includes(cle));
-}
 
 export function validerDemande(saisie: SaisieDemande): ErreursDemande {
   const erreurs: ErreursDemande = {};
@@ -84,7 +81,7 @@ export function creerDemande(
     quantite: Number(saisie.quantite),
     motif: saisie.motif.trim(),
     statut: "soumise",
-    creeLe: aujourdhui.toISOString().slice(0, 10),
+    creeLe: dateISO(aujourdhui),
     nouvelArrivant: { prenom: saisie.prenom.trim(), nom: saisie.nom.trim() },
   };
 }

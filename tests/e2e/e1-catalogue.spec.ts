@@ -142,3 +142,98 @@ test.describe("E1-4 · identifier l'émetteur et le nouvel arrivant", () => {
     await expect(page.getByText(/Demande D-\d+ soumise/)).toHaveCount(0);
   });
 });
+
+test.describe("E1-5 · préparer les accès du nouvel arrivant", () => {
+  async function ouvrirAssistant(page: Page) {
+    await page.goto("/catalogue");
+    await page.getByLabel("Rôle").selectOption("manager");
+    await page.getByRole("button", { name: "Préparer l'arrivée d'un nouvel arrivant" }).click();
+  }
+
+  async function remplirEtape1(page: Page) {
+    await remplirIdentite(page);
+    await page.getByLabel("Date d'arrivée").fill("2099-01-04");
+    await page.getByLabel("Service", { exact: true }).selectOption("Comptabilité");
+  }
+
+  test("sans les champs obligatoires, on reste à l'étape 1 et chaque champ est signalé", async ({ page }) => {
+    await ouvrirAssistant(page);
+    await page.getByRole("button", { name: "Suivant" }).click();
+    for (const message of [
+      "Choisissez l'émetteur de la demande.",
+      "Saisissez le prénom du nouvel arrivant.",
+      "Saisissez le nom du nouvel arrivant.",
+      "Saisissez la date d'arrivée.",
+      "Choisissez le service.",
+    ]) {
+      await expect(page.getByText(message)).toBeVisible();
+    }
+    await expect(page.getByText("Étape 1 sur 2 : Accès")).toBeVisible();
+  });
+
+  test("une date d'arrivée passée est refusée", async ({ page }) => {
+    await ouvrirAssistant(page);
+    await remplirEtape1(page);
+    await page.getByLabel("Date d'arrivée").fill("2020-01-06");
+    await page.getByRole("button", { name: "Suivant" }).click();
+    await expect(page.getByText("La date d'arrivée ne peut pas être dans le passé.")).toBeVisible();
+    await expect(page.getByText("Étape 1 sur 2 : Accès")).toBeVisible();
+  });
+
+  test("applications avec profil de référence : recherche, profil obligatoire, plusieurs applications", async ({ page }) => {
+    await ouvrirAssistant(page);
+    await remplirEtape1(page);
+    for (const application of ["Messagerie", "Paie et RH"]) {
+      await page.getByLabel("Application à ajouter").selectOption(application);
+      await page.getByRole("button", { name: "Ajouter l'application" }).click();
+    }
+    await expect(page.getByLabel("Application à ajouter").locator("option", { hasText: "Messagerie" })).toHaveCount(0);
+
+    await page.getByLabel("Rechercher un profil pour Messagerie").fill("ma");
+    await expect(page.getByLabel("Profil de référence pour Messagerie").locator("option")).toHaveText([
+      "Choisir une personne",
+      "Mathilde Roux (Comptabilité)",
+      "Thomas Garnier (Commercial)",
+      "Émilie Marchand (Achats)",
+      "Camille Martin (Comptabilité)",
+      "Manon Girard (Ressources humaines)",
+    ]);
+    await page.getByLabel("Profil de référence pour Messagerie").selectOption({ label: "Camille Martin (Comptabilité)" });
+
+    await page.getByRole("button", { name: "Suivant" }).click();
+    await expect(page.getByRole("listitem", { name: "Paie et RH" })).toContainText("Choisissez un profil de référence.");
+    await expect(page.getByRole("listitem", { name: "Messagerie" })).not.toContainText("Choisissez un profil de référence.");
+
+    await page.getByLabel("Profil de référence pour Paie et RH").selectOption({ label: "Manon Girard (Ressources humaines)" });
+    await page.getByRole("button", { name: "Suivant" }).click();
+    await expect(page.getByText("Étape 2 sur 2 : Matériel")).toBeVisible();
+
+    // Retour à l'étape 1 : la saisie est conservée.
+    await page.getByRole("button", { name: "Précédent" }).click();
+    await expect(page.getByLabel("Prénom du nouvel arrivant")).toHaveValue("Léa");
+    await expect(page.getByLabel("Profil de référence pour Messagerie")).toHaveValue("P-08");
+  });
+
+  test("on ajoute et retire des répertoires, un doublon est refusé", async ({ page }) => {
+    await ouvrirAssistant(page);
+    const champ = page.getByLabel("Répertoire", { exact: true });
+    const liste = page.getByRole("list", { name: "Répertoires demandés" });
+    await champ.fill("\\\\partage\\compta\\2026");
+    await page.getByRole("button", { name: "Ajouter le répertoire" }).click();
+    await champ.fill("\\\\partage\\rh");
+    await page.getByRole("button", { name: "Ajouter le répertoire" }).click();
+    await expect(liste.getByRole("listitem")).toHaveCount(2);
+    await champ.fill("\\\\partage\\rh");
+    await page.getByRole("button", { name: "Ajouter le répertoire" }).click();
+    await expect(page.getByText("Ce répertoire est déjà dans la liste.")).toBeVisible();
+    await page.getByRole("button", { name: "Retirer \\\\partage\\compta\\2026" }).click();
+    await expect(liste.getByRole("listitem")).toHaveText(["\\\\partage\\rhRetirer"]);
+  });
+
+  test("hors du rôle Manager, l'assistant n'est pas proposé", async ({ page }) => {
+    await page.goto("/catalogue");
+    await page.getByRole("button", { name: "Préparer l'arrivée d'un nouvel arrivant" }).click();
+    await expect(page.getByText("Choisissez « Manager » dans le menu « Je suis » pour préparer une arrivée.")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Suivant" })).toHaveCount(0);
+  });
+});

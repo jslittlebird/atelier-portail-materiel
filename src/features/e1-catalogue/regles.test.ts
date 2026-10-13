@@ -7,13 +7,12 @@ import {
   estValide,
   filtrerParCategorie,
   libelleDelai,
-  filtrerEmetteurs,
   TOUTES_CATEGORIES,
   validerDemande,
   type Emetteur,
   type SaisieDemande,
 } from "./regles";
-import emetteursFictifs from "./emetteurs.json";
+import { ANNUAIRE, EMETTEURS, filtrerPersonnes } from "./annuaire";
 
 describe("E1-1 · consulter le catalogue", () => {
   it("un article sans stock est indisponible", () => {
@@ -90,8 +89,6 @@ describe("E1-3 · créer une demande", () => {
 });
 
 describe("E1-4 · identifier l'émetteur et le nouvel arrivant", () => {
-  const emetteurs = emetteursFictifs as Emetteur[];
-
   it("la demande porte le nom et le service de l'émetteur, et le nouvel arrivant", () => {
     const demande = creerDemande(demandesDeDepart, articleParId("PC-14")!, { ...saisieValide, prenom: " Léa ", nom: "Dupont " }, karim);
     expect(demande.demandeur).toBe("Karim Lefèvre");
@@ -100,16 +97,22 @@ describe("E1-4 · identifier l'émetteur et le nouvel arrivant", () => {
   });
 
   it("la recherche ne garde que les noms qui contiennent le texte saisi", () => {
-    expect(filtrerEmetteurs(emetteurs, "ma").map((e) => e.nom)).toEqual(["Mathilde Roux", "Thomas Garnier", "Émilie Marchand"]);
+    expect(filtrerPersonnes(EMETTEURS, "ma").map((e) => e.nom)).toEqual(["Mathilde Roux", "Thomas Garnier", "Émilie Marchand"]);
   });
 
   it("la recherche ignore les majuscules et les accents", () => {
-    expect(filtrerEmetteurs(emetteurs, "EMILIE").map((e) => e.nom)).toEqual(["Émilie Marchand"]);
-    expect(filtrerEmetteurs(emetteurs, "lefevre").map((e) => e.nom)).toEqual(["Karim Lefèvre"]);
+    expect(filtrerPersonnes(EMETTEURS, "EMILIE").map((e) => e.nom)).toEqual(["Émilie Marchand"]);
+    expect(filtrerPersonnes(EMETTEURS, "lefevre").map((e) => e.nom)).toEqual(["Karim Lefèvre"]);
+  });
+
+  it("seuls les managers de l'annuaire peuvent émettre une demande", () => {
+    expect(EMETTEURS.length).toBeGreaterThan(0);
+    expect(EMETTEURS.every((p) => p.manager)).toBe(true);
+    expect(EMETTEURS.length).toBeLessThan(ANNUAIRE.length);
   });
 
   it("une recherche vide propose tous les émetteurs", () => {
-    expect(filtrerEmetteurs(emetteurs, "")).toHaveLength(emetteurs.length);
+    expect(filtrerPersonnes(EMETTEURS, "")).toHaveLength(EMETTEURS.length);
   });
 
   it.each([

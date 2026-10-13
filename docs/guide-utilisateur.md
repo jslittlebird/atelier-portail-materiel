@@ -7,6 +7,7 @@
 | Changer de rôle (démonstration) | Le menu « Je suis » en haut à droite | Tous |
 | Consulter le catalogue du matériel | Le menu « Catalogue (E1) » | Tous |
 | Demander du matériel | Le bouton « Demander » d'un article du catalogue | Manager |
+| Préparer l'arrivée d'un nouvel arrivant | Le bouton « Préparer l'arrivée d'un nouvel arrivant » en haut du catalogue | Manager |
 
 ## Demandeur
 
@@ -31,6 +32,19 @@ La demande est réservée aux managers : choisissez « Manager » dans le menu �
 7. Vérifiez le récapitulatif : numéro de la demande (par exemple « Demande D-006 soumise »), émetteur et nouvel arrivant. La demande est au statut « Soumise » et part en validation.
 
 Si un champ est mal rempli, un message rouge l'indique sous le champ et la demande n'est pas envoyée.
+
+### Préparer l'arrivée d'un nouvel arrivant
+
+Réservé aux managers : choisissez « Manager » dans le menu « Je suis ».
+
+1. En haut du catalogue, cliquez sur « Préparer l'arrivée d'un nouvel arrivant ».
+2. Étape 1 « Accès » :
+   - Choisissez votre nom dans « Émetteur », puis saisissez le prénom et le nom du nouvel arrivant.
+   - Saisissez sa date d'arrivée (aujourd'hui ou plus tard) et choisissez son service.
+   - Pour chaque application nécessaire : choisissez-la dans « Application à ajouter », cliquez sur « Ajouter l'application », puis choisissez son « Profil de référence ». C'est la personne dont les droits serviront de modèle. Tapez les premières lettres de son nom dans « Rechercher un profil » pour la trouver vite.
+   - Pour chaque répertoire partagé, saisissez son chemin et cliquez sur « Ajouter le répertoire ». Cliquez sur « Retirer » pour l'enlever.
+3. Cliquez sur « Suivant ». Si un champ manque, un message rouge l'indique et vous restez à l'étape 1.
+4. Cliquez sur « Précédent » pour revenir à l'étape 1 : votre saisie est conservée.
 
 ## Manager
 
