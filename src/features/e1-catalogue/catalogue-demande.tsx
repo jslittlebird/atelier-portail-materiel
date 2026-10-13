@@ -15,7 +15,9 @@ function Confirmation({ demande }: { demande: Demande }) {
     <Alert>
       <AlertTitle>Demande {demande.id} soumise</AlertTitle>
       <AlertDescription>
-        {articleParId(demande.articleId)?.nom} × {demande.quantite} · statut « {STATUTS[demande.statut]} »
+        <p>{articleParId(demande.articleId)?.nom} × {demande.quantite} · statut « {STATUTS[demande.statut]} »</p>
+        <p>Émetteur : {demande.demandeur} ({demande.service})</p>
+        {demande.nouvelArrivant && <p>Pour : {demande.nouvelArrivant.prenom} {demande.nouvelArrivant.nom}</p>}
       </AlertDescription>
     </Alert>
   );

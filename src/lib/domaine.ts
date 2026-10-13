@@ -39,6 +39,8 @@ export type Demande = {
   statut: Statut;
   creeLe: string;
   commentaire?: string;
+  /** Personne pour qui le matériel est demandé (demande d'onboarding, E1-4). Optionnel. */
+  nouvelArrivant?: { prenom: string; nom: string };
 };
 
 export const catalogue: Article[] = catalogueInitial;
